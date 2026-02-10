@@ -1,0 +1,92 @@
+# Market Data Automation - Cron Configuration Examples
+# Edit with: crontab -e
+# View with: crontab -l
+
+# ==============================================================================
+# IMPORTANT: Update paths before using!
+# Replace /path/to/market-data-automation with your actual path
+# Replace /path/to/venv with your virtual environment path
+# ==============================================================================
+
+# Example 1: Run every 15 minutes
+# This fetches data 4 times per hour
+*/15 * * * * cd /path/to/market-data-automation/src && /path/to/venv/bin/python main.py >> ../logs/cron.log 2>&1
+
+# Example 2: Run every hour at minute 0
+# This fetches data once per hour
+0 * * * * cd /path/to/market-data-automation/src && /path/to/venv/bin/python main.py >> ../logs/cron.log 2>&1
+
+# Example 3: Run every 30 minutes during market hours (9:30 AM - 4:00 PM EST)
+# Weekdays only
+*/30 9-15 * * 1-5 cd /path/to/market-data-automation/src && /path/to/venv/bin/python main.py >> ../logs/cron.log 2>&1
+
+# Example 4: Run at specific times during trading days
+# 9:30 AM - Market open
+30 9 * * 1-5 cd /path/to/market-data-automation/src && /path/to/venv/bin/python main.py >> ../logs/cron.log 2>&1
+
+# 12:00 PM - Midday
+0 12 * * 1-5 cd /path/to/market-data-automation/src && /path/to/venv/bin/python main.py >> ../logs/cron.log 2>&1
+
+# 4:00 PM - Market close
+0 16 * * 1-5 cd /path/to/market-data-automation/src && /path/to/venv/bin/python main.py >> ../logs/cron.log 2>&1
+
+# Example 5: Run every 5 minutes during trading hours
+# For more frequent monitoring
+*/5 9-16 * * 1-5 cd /path/to/market-data-automation/src && /path/to/venv/bin/python main.py >> ../logs/cron.log 2>&1
+
+# Example 6: Crypto monitoring (24/7 every hour)
+0 * * * * cd /path/to/market-data-automation/src && /path/to/venv/bin/python main.py >> ../logs/cron.log 2>&1
+
+# Example 7: Daily summary at 5 PM
+0 17 * * 1-5 cd /path/to/market-data-automation/src && /path/to/venv/bin/python main.py >> ../logs/cron.log 2>&1
+
+# ==============================================================================
+# Cron Syntax Reference:
+# ==============================================================================
+# * * * * * command
+# │ │ │ │ │
+# │ │ │ │ └─── Day of week (0-7, 0 and 7 are Sunday)
+# │ │ │ └───── Month (1-12)
+# │ │ └─────── Day of month (1-31)
+# │ └───────── Hour (0-23)
+# └─────────── Minute (0-59)
+
+# Special strings:
+# @reboot    - Run once at startup
+# @hourly    - Run once per hour (0 * * * *)
+# @daily     - Run once per day (0 0 * * *)
+# @weekly    - Run once per week (0 0 * * 0)
+# @monthly   - Run once per month (0 0 1 * *)
+
+# ==============================================================================
+# How to set up:
+# ==============================================================================
+# 1. Find your actual paths:
+#    pwd                              # Get current directory
+#    which python                     # Get Python path (while venv is active)
+#
+# 2. Open crontab:
+#    crontab -e
+#
+# 3. Copy one of the examples above
+#
+# 4. Replace paths with your actual paths
+#
+# 5. Save and exit
+#
+# 6. Verify:
+#    crontab -l                       # List current cron jobs
+#
+# 7. Check logs:
+#    tail -f /path/to/market-data-automation/logs/cron.log
+#
+# ==============================================================================
+# Troubleshooting:
+# ==============================================================================
+# If cron jobs don't run:
+# 1. Check cron service is running: sudo service cron status
+# 2. Check logs: grep CRON /var/log/syslog
+# 3. Verify paths are absolute (not relative)
+# 4. Ensure Python virtual environment path is correct
+# 5. Check file permissions: ls -la /path/to/main.py
+# 6. Test command manually first
